@@ -1,30 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="*" Name="INTL.Wix.Wpf.Client.Msi" Language="1033" Version="1.0.0.0" Manufacturer="" UpgradeCode="5f0ebce3-64ff-4ce7-8189-0aff31fddfa9">
-		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
-
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		<MediaTemplate />
-
-		<Feature Id="ProductFeature" Title="INTL.Wix.Wpf.Client.Msi" Level="1">
-			<ComponentGroupRef Id="ProductComponents" />
-		</Feature>
-	</Product>
-
-	<Fragment>
-		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="INTL.Wix.Wpf.Client.Msi" />
-			</Directory>
-		</Directory>
-	</Fragment>
-
-	<Fragment>
-		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
-			<!-- <Component Id="ProductComponent"> -->
-				<!-- TODO: Insert files, registry keys, and other resources here. -->
-			<!-- </Component> -->
-		</ComponentGroup>
-	</Fragment>
+  <Product Id="*" Name="INTL.Wix.Wpf.Client.Msi" Language="1033" Version="1.0.0.0" Manufacturer="INTLFCStone" UpgradeCode="27047d35-ca2a-44ee-8646-e8ef56f88e5d">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perUser" InstallPrivileges="limited" />
+    <MajorUpgrade Schedule="afterInstallInitialize" AllowDowngrades="yes" />
+    <MediaTemplate EmbedCab="yes" />
+    <Feature Id="ProductFeature" Title="INTL.Wix.Wpf.Client.Msi" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="ProductLib" />
+      <ComponentRef Id="ProductRoot" />
+    </Feature>
+    <Upgrade Id="27047d35-ca2a-44ee-8646-e8ef56f88e5d">
+      <UpgradeVersion Property="REMOVINGTHEOLDVERSION" Minimum="1.0.0.0" RemoveFeatures="ALL" OnlyDetect="no" />
+    </Upgrade>
+  </Product>
+  <Fragment>
+    <SetProperty Id="ProgramFilesFolder" Value="[LocalAppDataFolder]" Before="CostFinalize"><![CDATA[NOT Privileged]]></SetProperty>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="RootDirectory" Name="INTL">
+        <Directory Id="InstallFolder" Name="INTL.Wix.Wpf.Client.Msi" >
+          <Directory Id="LibDirectory" Name="lib" />
+        </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+    <DirectoryRef Id="RootDirectory">
+      <Component Id="ProductRoot" Guid="9f3cedbe-0a96-4c7e-af66-d84f34057f3a" KeyPath="yes">
+      <CreateFolder />
+      </Component>
+    </DirectoryRef>
+    <DirectoryRef Id="LibDirectory">
+      <Component Id="ProductLib" Guid="fa02e5c6-d573-4652-98c1-fff0e6203e42" KeyPath="yes">
+        <CreateFolder />
+        <File Id="INTL.Wix.Wpf.Client.DLL.Microsoft.HockeyApp.Core45.dll" Source="..\INTL.Wix.Wpf.Client\bin\$(var.Configuration)\Microsoft.HockeyApp.Core45.dll" />
+        <File Id="INTL.Wix.Wpf.Client.DLL.Microsoft.HockeyApp.Kit.dll" Source="..\INTL.Wix.Wpf.Client\bin\$(var.Configuration)\Microsoft.HockeyApp.Kit.dll" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="InstallFolder">
+      <Component Id="INTL.Wix.Wpf.Client.Binaries.INTL.Wix.Wpf.Client.exe" Guid="9d7dc17b-cd42-4adf-adec-2ed4bbdd63cb">
+        <File Id="INTL.Wix.Wpf.Client.Binaries.INTL.Wix.Wpf.Client.exe" Source="..\INTL.Wix.Wpf.Client\bin\$(var.Configuration)\INTL.Wix.Wpf.Client.exe" />
+      </Component>
+      <Component Id="INTL.Wix.Wpf.Client.Config.INTL.Wix.Wpf.Client.exe.config" Guid="ba95e844-280a-4515-a217-5136f814ccdd">
+        <File Id="INTL.Wix.Wpf.Client.Config.INTL.Wix.Wpf.Client.exe.config" Source="..\INTL.Wix.Wpf.Client\bin\$(var.Configuration)\INTL.Wix.Wpf.Client.exe.config" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
 </Wix>
+
