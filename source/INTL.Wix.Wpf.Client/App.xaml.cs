@@ -67,13 +67,22 @@ namespace INTL.Wix.Wpf.Client
 
             field?.SetValue(hockeyClient, crashLogInfo);
 
-            await HockeyClient.Current.CheckForUpdatesAsync(false, () =>
-            {
-                Current.MainWindow?.Close();
-                return true;
-            });
+            await HockeyClient.Current.CheckForUpdatesAsync(false, () => true, MandatoryUpdateAvailableAction);
 
             #endregion
+        }
+
+        private void MandatoryUpdateAvailableAction(IAppVersion appVersion)
+        {
+            if (appVersion.Mandatory)
+            {
+                MandatoryUpdateAvailableActionAsync(appVersion).Wait();
+            }
+        }
+
+        private static async Task MandatoryUpdateAvailableActionAsync(IAppVersion appVersion)
+        {
+            await appVersion.DownloadMsi(information => false, appVersion.InstallVersion);
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Configuration;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.HockeyApp;
+using Microsoft.HockeyApp.Gui;
 
 namespace INTL.Wix.Wpf.Client
 {
@@ -10,6 +12,8 @@ namespace INTL.Wix.Wpf.Client
     /// </summary>
     public partial class MainWindow : Window
     {
+        private IAppVersion _appVersion;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -22,7 +26,19 @@ namespace INTL.Wix.Wpf.Client
 
         private async Task UpdateButtonClickAsync()
         {
-            await HockeyClient.Current.CheckForUpdatesAsync(true, () => true);
+           //await HockeyClient.Current.CheckForUpdatesAsync(true, () => true);
+
+            await HockeyClient.Current.CheckForUpdatesAsync(false, () => true, MandatoryUpdateAvailableAction);
+        }
+
+        private void MandatoryUpdateAvailableAction(IAppVersion appVersion)
+        {
+            MandatoryUpdateAvailableActionAsync(appVersion).Wait();
+        }
+
+        private static async Task MandatoryUpdateAvailableActionAsync(IAppVersion appVersion)
+        {
+            await appVersion.DownloadMsi(information => false,appVersion.InstallVersion);
         }
     }
 }
