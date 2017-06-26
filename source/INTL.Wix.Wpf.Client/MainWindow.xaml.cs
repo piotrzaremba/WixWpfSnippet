@@ -26,19 +26,7 @@ namespace INTL.Wix.Wpf.Client
 
         private async Task UpdateButtonClickAsync()
         {
-           //await HockeyClient.Current.CheckForUpdatesAsync(true, () => true);
-
-            await HockeyClient.Current.CheckForUpdatesAsync(false, () => true, MandatoryUpdateAvailableAction);
-        }
-
-        private void MandatoryUpdateAvailableAction(IAppVersion appVersion)
-        {
-            MandatoryUpdateAvailableActionAsync(appVersion).Wait();
-        }
-
-        private static async Task MandatoryUpdateAvailableActionAsync(IAppVersion appVersion)
-        {
-            await appVersion.DownloadMsi(information => false,appVersion.InstallVersion);
+           await HockeyClient.Current.CheckForUpdatesAsync(true, () => true);
         }
     }
 }

@@ -76,6 +76,7 @@ namespace INTL.Wix.Wpf.Client
         {
             if (appVersion.Mandatory)
             {
+                MessageBox.Show("Mandatory Update Required.", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
                 MandatoryUpdateAvailableActionAsync(appVersion).Wait();
             }
         }
