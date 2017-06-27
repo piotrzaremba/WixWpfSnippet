@@ -123,6 +123,11 @@
       <TransformOnBuild>true</TransformOnBuild>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="WixSample.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\SlowCheetah.2.5.48\build\SlowCheetah.targets" Condition="Exists('..\..\packages\SlowCheetah.2.5.48\build\SlowCheetah.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

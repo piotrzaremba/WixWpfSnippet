@@ -8,18 +8,8 @@
       <ComponentGroupRef Id="ProductComponents" />
       <ComponentRef Id="ProductLib" />
       <ComponentRef Id="ProductRoot" />
-
-      <Component Id="ApplicationShortcut" Guid="E8074DD1-DFB6-4DCA-A69C-0F02FFCBEE21" Directory="DesktopFolder" >
-        <Shortcut Id="ApplicationStartMenuShortcut"
-                  Name="INTL.Wix.Wpf.Client"
-                  Description="INTL.Wix.Wpf.Client"
-                  Directory="DesktopFolder"
-                  Target="[InstallFolder]INTL.Wix.Wpf.Client.exe"
-                  WorkingDirectory="InstallFolder"/>
-        <RegistryValue Root="HKCU" Key="Software\INTLFCStone\INTL.Wix.Wpf.Client" Name="installed" Type="integer" Value="1" KeyPath="yes" />
-      </Component>
       <ComponentRef Id="ApplicationShortcut" />
-      
+      <ComponentRef Id="ApplicationShortcutDesktop" />
     </Feature>
     <Upgrade Id="27047d35-ca2a-44ee-8646-e8ef56f88e5d">
       <UpgradeVersion Property="REMOVINGTHEOLDVERSION" Minimum="1.0.0.0" RemoveFeatures="ALL" OnlyDetect="no" />
@@ -28,7 +18,6 @@
   <Fragment>
     <SetProperty Id="ProgramFilesFolder" Value="[LocalAppDataFolder]" Before="CostFinalize"><![CDATA[NOT Privileged]]></SetProperty>
     <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="DesktopFolder" SourceName="Desktop" />
       <Directory Id="ProgramFilesFolder">
         <Directory Id="RootDirectory" Name="INTL">
         <Directory Id="InstallFolder" Name="INTL.Wix.Wpf.Client.Msi" >
@@ -36,6 +25,10 @@
         </Directory>
         </Directory>
       </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="INTL.Wix.Wpf.Client" />
+      </Directory>
+      <Directory Id="DesktopFolder" Name="Desktop"/>
     </Directory>
     <DirectoryRef Id="RootDirectory">
       <Component Id="ProductRoot" Guid="9f3cedbe-0a96-4c7e-af66-d84f34057f3a" KeyPath="yes">
@@ -49,6 +42,29 @@
         <File Id="INTL.Wix.Wpf.Client.DLL.Microsoft.HockeyApp.Kit.dll" Source="..\INTL.Wix.Wpf.Client\bin\$(var.Configuration)\Microsoft.HockeyApp.Kit.dll" />
       </Component>
     </DirectoryRef>
+    <Icon Id="WixSample.ico" SourceFile="..\INTL.Wix.Wpf.Client\bin\$(var.Configuration)\WixSample.ico" />
+    <DirectoryRef Id="ApplicationProgramsFolder">
+     <Component Id="ApplicationShortcut" Guid="61744B84-44FD-41A4-A6F6-D5EBEE18313A">
+       <Shortcut Id="ApplicationStartMenuShortcut" Icon="WixSample.ico" Name="INTL.Wix.Wpf.Client.Msi" Description="INTL.Wix.Wpf.Client.Msi" Target="[InstallFolder]INTL.Wix.Wpf.Client.exe" WorkingDirectory="InstallFolder" />
+       <RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
+       <RegistryValue Root="HKCU" Key="Software\INTLFCStone\INTL.Wix.Wpf.Client.Msi" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+     </Component>
+   </DirectoryRef>
+   <DirectoryRef Id="DesktopFolder">
+     <Component Id="ApplicationShortcutDesktop" Guid="A0062B2D-A37A-45E0-8D64-4262CF34712F">
+       <Shortcut Id="ApplicationDesktopShortcut" Icon="WixSample.ico" Name="INTL.Wix.Wpf.Client.Msi" Description="INTL.Wix.Wpf.Client.Msi>" Target="[InstallFolder]INTL.Wix.Wpf.Client.exe" WorkingDirectory="InstallFolder" />
+       <RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
+       <RegistryValue Root="HKCU" Key="Software\INTLFCStone\INTL.Wix.Wpf.Client.Msi" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+     </Component>
+   </DirectoryRef>
+    
+    
+    
+    
+    
+    
+    
+    
   </Fragment>
   <Fragment>
     <ComponentGroup Id="ProductComponents" Directory="InstallFolder">
