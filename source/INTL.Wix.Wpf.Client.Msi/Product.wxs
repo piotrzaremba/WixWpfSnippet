@@ -8,6 +8,18 @@
       <ComponentGroupRef Id="ProductComponents" />
       <ComponentRef Id="ProductLib" />
       <ComponentRef Id="ProductRoot" />
+
+      <Component Id="ApplicationShortcut" Guid="E8074DD1-DFB6-4DCA-A69C-0F02FFCBEE21" Directory="DesktopFolder" >
+        <Shortcut Id="ApplicationStartMenuShortcut"
+                  Name="INTL.Wix.Wpf.Client"
+                  Description="INTL.Wix.Wpf.Client"
+                  Directory="DesktopFolder"
+                  Target="[InstallFolder]INTL.Wix.Wpf.Client.exe"
+                  WorkingDirectory="InstallFolder"/>
+        <RegistryValue Root="HKCU" Key="Software\INTLFCStone\INTL.Wix.Wpf.Client" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+      <ComponentRef Id="ApplicationShortcut" />
+      
     </Feature>
     <Upgrade Id="27047d35-ca2a-44ee-8646-e8ef56f88e5d">
       <UpgradeVersion Property="REMOVINGTHEOLDVERSION" Minimum="1.0.0.0" RemoveFeatures="ALL" OnlyDetect="no" />
@@ -16,6 +28,7 @@
   <Fragment>
     <SetProperty Id="ProgramFilesFolder" Value="[LocalAppDataFolder]" Before="CostFinalize"><![CDATA[NOT Privileged]]></SetProperty>
     <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="DesktopFolder" SourceName="Desktop" />
       <Directory Id="ProgramFilesFolder">
         <Directory Id="RootDirectory" Name="INTL">
         <Directory Id="InstallFolder" Name="INTL.Wix.Wpf.Client.Msi" >
